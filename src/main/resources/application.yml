@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: Stock Azul e Rosa
+  web:
+    resources:
+      add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
