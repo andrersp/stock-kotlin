@@ -13,20 +13,24 @@ class ExceptionHanddler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMethodArgumentNotValid(exc: MethodArgumentNotValidException): ResponseEntity<ApiError> {
-
         val result = exc.bindingResult
-        println(result.fieldErrors)
         val errors = result.fieldErrors.last()
         val message = errors.defaultMessage ?: ""
         val field = errors.field
         val detail = "$field $message "
 
-
         return ResponseEntity(
             ApiError(errorType = "VALIDATION", errorCode = "INVALID_PAYLOAD", detail = detail),
             HttpStatus.BAD_REQUEST
         )
+    }
 
+    @ExceptionHandler
+    fun handlerApiException(exc: ApiException): ResponseEntity<ApiError> {
+        return ResponseEntity(
+            ApiError(errorCode = exc.errorCode, errorType = exc.errorType, detail = exc.detail ?: ""),
+            HttpStatus.BAD_REQUEST
+        )
     }
 
 
