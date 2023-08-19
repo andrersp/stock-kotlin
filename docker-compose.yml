@@ -1,0 +1,25 @@
+version: "3"
+networks:
+  database_network:
+volumes:
+  stock_volume:
+
+services:
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - stock_volume:/var/lib/postgresql/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - POSTGRES_USER=stock
+      - POSTGRES_PASSWORD=stock
+    ports:
+      - "5432:5432"
+    networks:
+      - database_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U stock" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5

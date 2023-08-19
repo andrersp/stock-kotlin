@@ -1,20 +1,19 @@
 package com.example.stock.controllers
 
 import com.example.stock.dto.UserRequestDTO
+import com.example.stock.dto.UserResponseDTO
 import com.example.stock.entity.User
+import com.example.stock.service.UserService
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
 
 
 @Tag(name = "User")
 @RestController
 @RequestMapping("/user")
-class UserController {
-    @Autowired
-    private lateinit var encode: BCryptPasswordEncoder
+class UserController(private val userService: UserService) {
+
 
     @GetMapping
     fun getUser(): List<User> = listOf(
@@ -23,13 +22,7 @@ class UserController {
     )
 
     @PostMapping
-    fun createUser(@Valid @RequestBody payload: UserRequestDTO): UserRequestDTO {
-
-
-        val password = encode.encode(payload.password.toString())
-        println(password)
-        return payload
-
-    }
+    fun createUser(@Valid @RequestBody payload: UserRequestDTO): UserResponseDTO =
+        userService.createUser(payload)
 
 }

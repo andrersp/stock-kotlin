@@ -15,3 +15,13 @@ data class UserRequestDTO(
     @field:NotBlank(message = "required")
     val password: String?
 )
+
+data class UserResponseDTO(
+    @Schema(example = "1")
+    val id: Long,
+    @Schema(example = "username")
+    val userName: String,
+    @Schema(example = "email@email.com")
+    val email: String,
+
+    )

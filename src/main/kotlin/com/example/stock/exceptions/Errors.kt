@@ -1,6 +1,20 @@
 package com.example.stock.exceptions
 
 val ERRORS = mapOf(
-    "INVALID_PAYLOAD" to mapOf("errorType" to "VALIDATION", "detail" to "invalid data on payload"),
-    "GENERIC_ERROR" to mapOf("errorType" to "GENERIC", "detail" to "generic error on request")
+    "INVALID_PAYLOAD" to mapOf(
+        "errorType" to "VALIDATION",
+        "detail" to "invalid data on payload"
+    ),
+    "GENERIC_ERROR" to mapOf(
+        "errorType" to "GENERIC",
+        "detail" to "generic error on request"
+    ),
+    "RESOURCE_EXISTS" to mapOf(
+        "errorType" to "DUPLICATE_RESOURCE",
+        "detail" to "indicates a duplicate / already existing record"
+    ),
+    "INTERNAL_ERROR" to mapOf(
+        "errorType" to "INTERNAL_ERROR",
+        "detail" to "internal error on request"
+    )
 )
