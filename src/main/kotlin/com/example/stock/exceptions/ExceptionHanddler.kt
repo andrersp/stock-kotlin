@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @ControllerAdvice
 class ExceptionHanddler {
@@ -31,6 +32,19 @@ class ExceptionHanddler {
             ApiError(errorCode = exc.errorCode, errorType = exc.errorType, detail = exc.detail ?: ""),
             HttpStatus.BAD_REQUEST
         )
+    }
+
+    @ExceptionHandler
+    fun handlerMethodArgumentTypeMismatchException(exc: MethodArgumentTypeMismatchException): ResponseEntity<ApiError> {
+
+
+        val detail = "${exc.requiredType.toString()} is required type of ${exc.propertyName}"
+
+        return ResponseEntity(
+            ApiError("INVALID_PARAM", "VALIDATION", detail),
+            HttpStatus.BAD_REQUEST
+        )
+
     }
 
 
