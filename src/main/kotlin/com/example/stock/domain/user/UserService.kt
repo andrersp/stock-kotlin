@@ -1,19 +1,16 @@
-package com.example.stock.service
+package com.example.stock.domain.user
 
 import com.example.stock.dto.UserRequestDTO
 import com.example.stock.dto.UserResponseDTO
-import com.example.stock.entity.User
 import com.example.stock.exceptions.ApiException
-import com.example.stock.repository.UserRepository
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
+
 @Service
-class UserService(private val encoder: PasswordEncoder, private val repository: UserRepository) {
-
-    fun createUser(user: UserRequestDTO): UserResponseDTO {
-
+class UserService(private val repository: UserRepository, private val encoder: PasswordEncoder) {
+    fun createUser(user: User): User {
         val userByEmail = repository.findFirstByEmail(user.email.toString())
 
         if (userByEmail != null) {
@@ -26,14 +23,17 @@ class UserService(private val encoder: PasswordEncoder, private val repository: 
             throw ApiException("RESOURCE_EXISTS", detail = "username exist")
         }
 
-        val userEntity = userDtoToEntity(user)
         try {
-            repository.save(userEntity)
+            return repository.save(user)
         } catch (exc: DataIntegrityViolationException) {
             throw ApiException("INTERNAL_ERROR")
         }
-        return userEntityToUserDTO(userEntity)
     }
+
+    fun getUsers(): List<User> = repository.findAll()
+
+    fun getUserById(userID: Long): User =
+        repository.findById(userID).orElseThrow { ApiException("RESOURCE_NOT_FOUND") }
 
 
     private fun userDtoToEntity(userDTO: UserRequestDTO): User =
@@ -48,6 +48,4 @@ class UserService(private val encoder: PasswordEncoder, private val repository: 
         userName = userEntity.userName.toString(),
         email = userEntity.email.toString()
     )
-
-
 }
