@@ -1,4 +1,4 @@
-package com.example.stock.domain.user
+package com.example.stock.entity
 
 import jakarta.persistence.*
 

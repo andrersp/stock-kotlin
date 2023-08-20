@@ -16,10 +16,5 @@ val ERRORS = mapOf(
     "INTERNAL_ERROR" to mapOf(
         "errorType" to "INTERNAL_ERROR",
         "detail" to "internal error on request"
-    ),
-    "RESOURCE_NOT_FOUND" to mapOf(
-        "errorType" to "NOT_FOUND",
-        "detail" to "indicates a missing / not found record"
     )
 )
-
