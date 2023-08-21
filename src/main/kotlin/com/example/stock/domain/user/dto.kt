@@ -1,10 +1,9 @@
-package com.example.stock.dto
+package com.example.stock.domain.user
 
-
-import com.example.stock.domain.user.User
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
+
 
 data class UserRequestDTO(
     @field:NotBlank(message = "required")
@@ -16,6 +15,7 @@ data class UserRequestDTO(
     @field:NotBlank(message = "required")
     val password: String?
 ) {
+
     fun toDomain(): User {
         return User(
             userName = this.userName.toString(),
@@ -32,4 +32,21 @@ data class UserResponseDTO(
     val userName: String,
     @Schema(example = "email@email.com")
     val email: String,
+) {
+    companion object MAPPER {
+        fun fromEntity(entity: User): UserResponseDTO {
+            return UserResponseDTO(
+                id = entity.id,
+                userName = entity.userName,
+                email = entity.email
+            )
+
+        }
+
+    }
+}
+
+data class LogindDTO(
+    val userName: String,
+    val password: String?
 )

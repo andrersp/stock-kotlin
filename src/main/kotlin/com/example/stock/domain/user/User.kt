@@ -2,6 +2,7 @@ package com.example.stock.domain.user
 
 import jakarta.persistence.*
 
+
 @Entity
 @Table(name = "users")
 class User(

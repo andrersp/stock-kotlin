@@ -10,7 +10,9 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(
+    
+) {
 
 
     @Bean
@@ -25,14 +27,16 @@ class SecurityConfig {
                     "/login*",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
-                    "/v2/api-docs/**",
-                    "/swagger-resources/**",
                     "/user",
                     "/user/*"
                 ).permitAll()
                 authorizeConfig.anyRequest().authenticated()
             }
-//            .addFilterBefore(this.filterToken, UsernamePasswordAuthenticationFilter::class.java)
             .build()
+
+
+//            .addFilterBefore(this.filterToken, UsernamePasswordAuthenticationFilter::class.java)
+
+
     }
 }
