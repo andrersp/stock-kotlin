@@ -20,7 +20,7 @@ data class UserRequestDTO(
         return User(
             userName = this.userName.toString(),
             email = this.email.toString(),
-            password = this.email.toString()
+            password = this.password.toString()
         )
     }
 }
@@ -46,7 +46,15 @@ data class UserResponseDTO(
     }
 }
 
-data class LogindDTO(
-    val userName: String,
+data class LoginRequestDTO(
+    @field:NotBlank(message = "required")
+    @Schema(example = "username", required = true)
+    val userName: String?,
+    @field:NotBlank(message = "required")
     val password: String?
+)
+
+data class LoginResponseDTO(
+    val tokenType: String,
+    val accessToken: String
 )

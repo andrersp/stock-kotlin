@@ -19,6 +19,7 @@ class UserController(private val userService: UserService) {
     fun getUser(): List<UserResponseDTO> = userService.getUsers()
         .map { user: User -> UserResponseDTO.fromEntity(user) }
 
+
     @PostMapping
     fun createUser(@Valid @RequestBody payload: UserRequestDTO): UserResponseDTO {
 

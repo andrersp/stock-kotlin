@@ -36,4 +36,19 @@ class UserService(private val repository: UserRepository, private val encoder: P
     fun getUserById(userID: Long): User =
         repository.findById(userID).orElseThrow { ApiException("RESOURCE_NOT_FOUND") }
 
+    fun login(userName: String, password: String): User {
+        val user = repository.findFirstByUserName(userName) ?: throw ApiException(
+            "INVALID_PAYLOAD",
+            detail = "invalid username or password"
+        )
+
+        if (!encoder.matches(password, user.password)) {
+            throw ApiException(
+                "INVALID_PAYLOAD",
+                detail = "invalid username or password"
+            )
+        }
+        return user
+    }
+
 }
