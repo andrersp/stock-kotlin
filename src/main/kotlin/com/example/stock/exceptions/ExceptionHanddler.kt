@@ -1,5 +1,6 @@
 package com.example.stock.exceptions
 
+import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -45,6 +46,11 @@ class ExceptionHanddler {
             HttpStatus.BAD_REQUEST
         )
 
+    }
+
+    @ExceptionHandler
+    fun handlerExpiredJwtException(exc: ExpiredJwtException): ApiError {
+        return ApiError(errorCode = "Mensagem", errorType = "ERRO", detail = "erro")
     }
 
 
