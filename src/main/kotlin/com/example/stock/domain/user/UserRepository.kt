@@ -6,4 +6,6 @@ interface UserRepository : JpaRepository<User, Long> {
     fun findFirstByEmail(email: String): User?
     fun findFirstByUserName(userName: String): User?
 
+    fun findByUserName(userName: String): User?
+
 }

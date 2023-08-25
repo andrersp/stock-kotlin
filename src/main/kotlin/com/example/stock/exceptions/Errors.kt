@@ -20,6 +20,11 @@ val ERRORS = mapOf(
     "RESOURCE_NOT_FOUND" to mapOf(
         "errorType" to "NOT_FOUND",
         "detail" to "indicates a missing / not found record"
+    ),
+    "EXPIRED_TOKEN" to mapOf(
+        "errorType" to "Authentication",
+        "detail" to "Token expired"
+
     )
 )
 

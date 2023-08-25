@@ -21,13 +21,7 @@ class UserController(private val userService: UserService) {
 
 
     @PostMapping
-    fun createUser(@Valid @RequestBody payload: UserRequestDTO): UserResponseDTO {
-
-        val user = userService.createUser(payload.toDomain())
-
-        return UserResponseDTO(userName = user.userName, email = user.email, id = user.id)
-
-    }
+    fun createUser(@Valid @RequestBody payload: UserRequestDTO) = userService.createUser(payload)
 
 
     @GetMapping("/{userID}")

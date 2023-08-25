@@ -14,16 +14,7 @@ data class UserRequestDTO(
     val email: String?,
     @field:NotBlank(message = "required")
     val password: String?
-) {
-
-    fun toDomain(): User {
-        return User(
-            userName = this.userName.toString(),
-            email = this.email.toString(),
-            password = this.password.toString()
-        )
-    }
-}
+)
 
 data class UserResponseDTO(
     @Schema(example = "1")
