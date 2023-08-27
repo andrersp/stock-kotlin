@@ -38,7 +38,7 @@ class SecurityConfig(
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .logout { logout ->
-                logout.logoutUrl("/loggout")
+                logout.logoutUrl("/logout")
                     .logoutSuccessHandler(HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
                     .invalidateHttpSession(true)
             }

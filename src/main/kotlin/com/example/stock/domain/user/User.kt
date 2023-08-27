@@ -9,7 +9,9 @@ import java.util.*
 @Entity
 @Table(name = "users")
 class User(
+    @Column(nullable = false, unique = true)
     var userName: String = "",
+    @Column(nullable = false, unique = true)
     var email: String = "",
     private val password: String = "",
     @Id

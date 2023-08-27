@@ -26,12 +26,17 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+
+    testImplementation("org.assertj:assertj-core:3.18.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    testImplementation("com.h2database:h2:2.2.220")
 
 }
 

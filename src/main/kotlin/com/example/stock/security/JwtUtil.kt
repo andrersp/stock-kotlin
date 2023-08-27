@@ -13,10 +13,13 @@ class JwtUtil {
     @Value("\${security.jwt-secret}")
     private lateinit var secretKey: String
 
+    @Value("\${security.jwt-expire-hours}")
+    private lateinit var expiredHours: String
+
 
     fun generateToken(userName: String): String = Jwts.builder()
         .setSubject(userName)
-        .setExpiration(Date(System.currentTimeMillis() + 600000))
+        .setExpiration(Date(System.currentTimeMillis() + hoursToMilliseconds()))
         .signWith(Keys.hmacShaKeyFor(secretKey.toByteArray()), SignatureAlgorithm.HS512)
         .compact()
 
@@ -32,6 +35,8 @@ class JwtUtil {
     }
 
     fun getUserName(token: String): String = getClaims(token).subject
+
+    private fun hoursToMilliseconds(): Long = expiredHours.toLong() * 60 * 60 * 1000
 
 
 }
