@@ -32,7 +32,9 @@ class JWTAuthenticationFilter(
         val authHeader = request.getHeader("Authorization")
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response)
+            val err = getError("")
+            response.status = HttpStatus.FORBIDDEN.value()
+            response.writer.write(ObjectMapper().writeValueAsString(err))
             return
 
         }
@@ -81,7 +83,7 @@ class JWTAuthenticationFilter(
     private fun getError(type: String) = when (type) {
         Expired -> ApiError(errorCode = "EXPIRED_TOKEN", errorType = "Authentication", detail = "Token expired")
         Signature -> ApiError(errorCode = "INVALID_TOKEN", errorType = "Authentication", detail = "Token invalid")
-        else -> ApiError(errorCode = "INVALID_TOKEN", errorType = "Authentication", detail = "Token invalid")
+        else -> ApiError(errorCode = "MISSING_TOKEN", errorType = "Authentication", detail = "Missing token")
     }
 
 }

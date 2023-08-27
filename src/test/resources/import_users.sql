@@ -1,0 +1,3 @@
+INSERT INTO users (email, password, user_name) VALUES ( 'email1@mail.com', '$2a$10$QQ2TMlYvlse9dvrpRQsb0.xqB34ZM/6RcUw6urXbPmCRTF2jfS.A.', 'user1');
+INSERT INTO users (email, password, user_name) VALUES ( 'email2@mail.com', '$2a$10$xSrwG3IvFctuWlDqJXQ5GukqycTeMOn9.LPdoEfF1FAAnj/xze/Wy', 'user2');
+INSERT INTO users (email, password, user_name) VALUES ( 'email3@mail.com', '$2a$10$uxRQw9r5DaULqj1sY69uA.yK2RShoqjhSEkw864h3iWBQMdcvOUhi', 'user3');

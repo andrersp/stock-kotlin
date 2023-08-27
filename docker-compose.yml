@@ -1,6 +1,6 @@
 version: "3"
 networks:
-  database_network:
+  app_network:
 volumes:
   stock_volume:
 
@@ -17,9 +17,25 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - database_network
+      - app_network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U stock" ]
       interval: 5s
       timeout: 5s
       retries: 5
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    networks:
+      - app_network
+    ports:
+      - "8080:8080"
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+
