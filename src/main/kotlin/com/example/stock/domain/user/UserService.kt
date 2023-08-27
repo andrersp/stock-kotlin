@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -74,6 +75,21 @@ class UserService(
             tokenType = "Bearer",
             accessToken = jwtUtil.generateToken(user!!.userName)
         )
+    }
+
+    fun aboutMe(): UserResponseDTO {
+        val user = repository.findFirstByUserName(getCurrentUserName()) ?: throw ApiException("RESOURCE_NOT_FOUND")
+
+        return UserResponseDTO(
+            userName = user.userName,
+            email = user.email,
+            id = user.id
+        )
+    }
+
+    private fun getCurrentUserName(): String {
+        val user = SecurityContextHolder.getContext().authentication.principal as User
+        return user.userName
     }
 
 }

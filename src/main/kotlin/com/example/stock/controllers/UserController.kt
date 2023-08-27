@@ -30,5 +30,8 @@ class UserController(private val userService: UserService) {
         return UserResponseDTO.fromEntity(user)
     }
 
+    @GetMapping("/about-me")
+    fun aboutMe(): UserResponseDTO = userService.aboutMe()
+
 
 }
