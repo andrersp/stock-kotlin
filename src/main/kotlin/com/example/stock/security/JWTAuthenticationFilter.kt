@@ -21,8 +21,13 @@ class JWTAuthenticationFilter(
     private val userDetailsService: UserDetailsService
 ) : OncePerRequestFilter() {
 
-    private val Expired = "EXPIRED"
-    private val Signature = "SIGNATURE"
+    object SECURITY {
+        const val EXPIRED = "EXPIRED"
+        const val SIGNATURE = "SIGNATURE"
+        const val MISSING = "MISSING"
+    }
+
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -32,7 +37,7 @@ class JWTAuthenticationFilter(
         val authHeader = request.getHeader("Authorization")
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            val err = getError("")
+            val err = getError(SECURITY.MISSING)
             response.status = HttpStatus.FORBIDDEN.value()
             response.writer.write(ObjectMapper().writeValueAsString(err))
             return
@@ -45,17 +50,17 @@ class JWTAuthenticationFilter(
         try {
             jwtUtil.isTokenValid(jwtToken)
         } catch (_: ExpiredJwtException) {
-            val err = getError(Expired)
+            val err = getError(SECURITY.EXPIRED)
             response.status = HttpStatus.FORBIDDEN.value()
             response.writer.write(ObjectMapper().writeValueAsString(err))
             return
         } catch (_: SignatureException) {
-            val err = getError(Signature)
+            val err = getError(SECURITY.SIGNATURE)
             response.status = HttpStatus.FORBIDDEN.value()
             response.writer.write(ObjectMapper().writeValueAsString(err))
             return
         } catch (_: Exception) {
-            val err = getError(Signature)
+            val err = getError(SECURITY.MISSING)
             response.status = HttpStatus.FORBIDDEN.value()
             response.writer.write(ObjectMapper().writeValueAsString(err))
             return
@@ -81,8 +86,22 @@ class JWTAuthenticationFilter(
 
 
     private fun getError(type: String) = when (type) {
-        Expired -> ApiError(errorCode = "EXPIRED_TOKEN", errorType = "Authentication", detail = "Token expired")
-        Signature -> ApiError(errorCode = "INVALID_TOKEN", errorType = "Authentication", detail = "Token invalid")
+        SECURITY.EXPIRED -> ApiError(
+            errorCode = "EXPIRED_TOKEN",
+            errorType = "Authentication",
+            detail = "Token expired"
+        )
+
+        SECURITY.SIGNATURE -> ApiError(
+            errorCode = "INVALID_TOKEN",
+            errorType = "Authentication",
+            detail = "Token invalid"
+        )
+
+        SECURITY.MISSING -> {
+            ApiError(errorCode = "MISSING_TOKEN", errorType = "Authentication", detail = "Missing token")
+        }
+
         else -> ApiError(errorCode = "MISSING_TOKEN", errorType = "Authentication", detail = "Missing token")
     }
 
