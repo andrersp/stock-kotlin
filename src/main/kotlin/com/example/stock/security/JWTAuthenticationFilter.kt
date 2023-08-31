@@ -37,9 +37,7 @@ class JWTAuthenticationFilter(
         val authHeader = request.getHeader("Authorization")
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            val err = getError(SECURITY.MISSING)
-            response.status = HttpStatus.FORBIDDEN.value()
-            response.writer.write(ObjectMapper().writeValueAsString(err))
+            filterChain.doFilter(request, response)
             return
 
         }

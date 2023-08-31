@@ -26,6 +26,7 @@ class SecurityConfig(
                 it
                     .requestMatchers(
                         "/login*",
+                        "/login/*",
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/login*",
