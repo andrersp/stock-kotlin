@@ -10,15 +10,13 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
+
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JWTAuthenticationFilter(
     private val jwtUtil: JwtUtil,
-    private val userDetailsService: UserDetailsService
 ) : OncePerRequestFilter() {
 
     object SECURITY {
@@ -37,7 +35,9 @@ class JWTAuthenticationFilter(
         val authHeader = request.getHeader("Authorization")
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response)
+            val err = getError(SECURITY.MISSING)
+            response.status = HttpStatus.FORBIDDEN.value()
+            response.writer.write(ObjectMapper().writeValueAsString(err))
             return
 
         }
@@ -45,8 +45,10 @@ class JWTAuthenticationFilter(
         val lengthBearerWithSpace = 7
         val jwtToken = authHeader.substring(lengthBearerWithSpace)
 
+        var tokenData = TokenData()
+
         try {
-            jwtUtil.isTokenValid(jwtToken)
+            tokenData = jwtUtil.parseToken(jwtToken)
         } catch (_: ExpiredJwtException) {
             val err = getError(SECURITY.EXPIRED)
             response.status = HttpStatus.FORBIDDEN.value()
@@ -63,21 +65,13 @@ class JWTAuthenticationFilter(
             response.writer.write(ObjectMapper().writeValueAsString(err))
             return
         }
-
-        val userName = jwtUtil.getUserName(jwtToken)
-
-
         if (SecurityContextHolder.getContext().authentication == null) {
-            val userDetails = userDetailsService.loadUserByUsername(userName)
             val authenticationToken = UsernamePasswordAuthenticationToken(
-                userDetails,
+                tokenData,
                 null,
-                userDetails.authorities
+                setOf()
             )
-
-            authenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
             SecurityContextHolder.getContext().authentication = authenticationToken
-
         }
         filterChain.doFilter(request, response)
     }

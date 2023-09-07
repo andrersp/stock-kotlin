@@ -1,37 +1,22 @@
 package com.example.stock.controllers
 
-import com.example.stock.domain.user.User
-import com.example.stock.domain.user.UserRequestDTO
-import com.example.stock.domain.user.UserResponseDTO
-import com.example.stock.domain.user.UserService
+import com.example.stock.security.TokenData
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 
 @Tag(name = "User")
 @RestController
 @RequestMapping("/user")
-class UserController(private val userService: UserService) {
-
-
-    @GetMapping
-    fun getUser(): List<UserResponseDTO> = userService.getUsers()
-        .map { user: User -> UserResponseDTO.fromEntity(user) }
-
-
-    @PostMapping
-    fun createUser(@Valid @RequestBody payload: UserRequestDTO) = userService.createUser(payload)
-
-
+class UserController() {
     @GetMapping("/{userID}")
-    fun getUserById(@PathVariable("userID") userId: Long): UserResponseDTO {
-        val user = userService.getUserById(userId)
-        return UserResponseDTO.fromEntity(user)
-    }
+    fun getUserById(@PathVariable("userID") userId: Long): TokenData {
 
-    @GetMapping("/about-me")
-    fun aboutMe(): UserResponseDTO = userService.aboutMe()
+        return TokenData.getTokenData()
+    }
 
 
 }

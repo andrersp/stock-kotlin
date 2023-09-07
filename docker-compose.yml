@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 networks:
   app_network:
 volumes:
@@ -23,19 +23,24 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  app:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    restart: always
-    networks:
-      - app_network
-    ports:
-      - "8080:8080"
-    env_file: .env
-    depends_on:
-      db:
-        condition: service_healthy
+  #app:
+  #  build:
+  #    context: .
+  #    dockerfile: ./Dockerfile
+  #  restart: on-failure
+  #  networks:
+  #    - app_network
+  #  ports:
+  #    - "8080:8080"
+  #  env_file: .env
+  #  depends_on:
+  #    db:
+  #      condition: service_healthy
+  #  deploy:
+  #    resources:
+  #      limits:
+  #        cpus: '0.5'
+  #        memory: 450M
 
 
 

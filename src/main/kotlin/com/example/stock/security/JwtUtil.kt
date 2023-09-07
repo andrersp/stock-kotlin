@@ -17,8 +17,13 @@ class JwtUtil {
     private lateinit var expiredHours: String
 
 
-    fun generateToken(userName: String): String = Jwts.builder()
-        .setSubject(userName)
+    fun generateToken(): String = Jwts.builder()
+        .setClaims(
+            mutableMapOf(
+                "canalVenda" to "1",
+                "canalSolicitacao" to "valor2"
+            )
+        )
         .setExpiration(Date(System.currentTimeMillis() + hoursToMilliseconds()))
         .signWith(Keys.hmacShaKeyFor(secretKey.toByteArray()), SignatureAlgorithm.HS512)
         .compact()
@@ -27,14 +32,15 @@ class JwtUtil {
         Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secretKey.toByteArray())).build()
             .parseClaimsJws(token).body
 
-    fun isTokenValid(token: String): Boolean {
+
+    fun parseToken(token: String): TokenData {
         val claims = getClaims(token)
-        val expirationDate = claims.expiration
-        val now = Date(System.currentTimeMillis())
-        return now.before(expirationDate)
+        val canalVenda = claims["canalVenda"].toString()
+        val canalSolicitacao = claims["canalSolicitacao"].toString()
+
+        return TokenData(canalVenda = canalVenda, canalSolicitacao = canalSolicitacao)
     }
 
-    fun getUserName(token: String): String = getClaims(token).subject
 
     private fun hoursToMilliseconds(): Long = expiredHours.toLong() * 60 * 60 * 1000
 
