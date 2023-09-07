@@ -45,7 +45,7 @@ class JWTAuthenticationFilter(
         val lengthBearerWithSpace = 7
         val jwtToken = authHeader.substring(lengthBearerWithSpace)
 
-        var tokenData = TokenData()
+        val tokenData: TokenData
 
         try {
             tokenData = jwtUtil.parseToken(jwtToken)
